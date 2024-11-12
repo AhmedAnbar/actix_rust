@@ -1,0 +1,74 @@
+services:
+  postgres:
+    image: postgres:latest
+    volumes:
+      - progresDB:/data/postgres
+      - ./migrations/init_files/postgres:/docker-entrypoint-initdb.d
+    env_file:
+      - ./.env
+    ports:
+      - 6502:5432
+    networks:
+      - docker_workspace_network
+
+  pgAdmin:
+    image: dpage/pgadmin4
+    env_file:
+      - ./.env
+    ports:
+      - "5053:80"
+    networks:
+      - docker_workspace_network
+
+  mysql:
+    image: mariadb:10.5
+    ports:
+      - 3307:3306
+    env_file:
+      - ./.env
+    volumes:
+      - ./mysql:/var/lib/mysql
+      - ./migrations/init_files/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - docker_workspace_network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - 8088:80
+    environment:
+      - PMA_HOST=mysql
+      - PMA_ARBITRARY=1
+      - PMA_USER=user
+      - PMA_PASSWORD=secret
+    restart: unless-stopped
+    networks:
+      - docker_workspace_network
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6376:6379"
+    volumes:
+      - redisDB:/data
+    networks:
+      - docker_workspace_network
+
+  smtp:
+    platform: linux/x86_64
+    image: mailhog/mailhog
+    logging:
+      driver: "none"
+    ports:
+      - "8002:1025"
+      - "8101:8025"
+    networks:
+      - docker_workspace_network
+
+volumes:
+  redisDB:
+  progresDB:
+
+networks:
+  docker_workspace_network:
+    driver: bridge

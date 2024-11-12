@@ -1,0 +1,32 @@
+{
+  "env": "test",
+  "host": "127.0.0.1",
+  "domain": "localhost",
+  "port": 4000,
+  "database": {
+    "url": "mysql://user:secret@localhost:3307/actix_test",
+    "connections": 16,
+    "transactions": {
+      "url": "mysql://user:secret@localhost:3307/actix_transactions_rust_test",
+      "connections": 16
+    }
+  },
+  "jwt": {
+    "secret": "k38vje-iejdn4-3junf8-85jsm3-nn49ai"
+  },
+  "cors": "http://localhost:3000",
+  "sms": {
+    "enable": true,
+    "account": "",
+    "token": "",
+    "from": "0123456789"
+  },
+  "smtp": {
+    "server": "172.18.0.3",
+    "username": "",
+    "password": "",
+    "port": 1025,
+    "encryption": "",
+    "from": "local@localhost.test"
+  }
+}
